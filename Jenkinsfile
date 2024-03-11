@@ -2,6 +2,8 @@ pipeline {
     agent any
     
     environment {
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         TF_VAR_region = "${params.region}"
         TF_VAR_subnet_id = "${params.subnet_id}"
         TF_VAR_security_group_ids = "${params.security_group_ids}"
@@ -29,7 +31,10 @@ pipeline {
             steps {
                 script {
                     // Assuming Terraform is installed and available in PATH
-                    sh 'terraform init'
+                    dir("terraform")
+                        {
+                            git "https://github.com/srikumartdba/Terraform-Jenkins_1.git"
+                        }
                 }
             }
         }
